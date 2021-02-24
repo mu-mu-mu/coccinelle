@@ -725,6 +725,14 @@ and unify_attribute attr1 attr2 =
       unify_mcode attr1 attr2
   | (Ast.MetaAttribute(_,_,_,_),_)
   | (_,Ast.MetaAttribute(_,_,_,_)) -> true
+  | (Ast.GccAttribute(_,_,_,arg1,_,_),Ast.GccAttribute(_,_,_,arg2,_,_)) ->
+      unify_gcc_attr_arg arg1 arg2
+  | _ -> false
+
+and unify_gcc_attr_arg arg1 arg2 =
+  match (arg1,arg2) with
+    (Ast.GccAttributeArg(arg_id1), Ast.GccAttributeArg(arg_id2)) ->
+      unify_mcode arg_id1 arg_id2
 
 and unify_exec_code ec1 ec2 =
   match (Ast.unwrap ec1,Ast.unwrap ec2) with

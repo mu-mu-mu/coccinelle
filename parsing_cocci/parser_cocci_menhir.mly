@@ -3169,7 +3169,6 @@ iso(term):
 *****************************************************************************/
 
 never_used: TDirective { () }
-  | TAttr_             { () }
   | TPArob TMetaPos    { () }
   | TPArob TMetaCom    { () }
   | TScriptData        { () }
@@ -3266,6 +3265,9 @@ attr:
  | TMetaAttribute
     { let (nm,cstr,pure,clt) = $1 in
       Ast0_cocci.wrap(Ast0_cocci.MetaAttribute(Parse_aux.clt2mcode nm clt,cstr,pure)) }
+ | TAttr_ TOPar TOPar TIdent TCPar TCPar
+    { Parse_aux.make_gcc_attr $1 $2 $3
+        (Ast0_cocci.GccAttributeArg(Parse_aux.clt2mcode (fst $4) (snd $4))) $5 $6 }
 
 anything: /* used for script code */
    TIdentifier { "identifier" }

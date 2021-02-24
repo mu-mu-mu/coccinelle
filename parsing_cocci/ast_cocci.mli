@@ -608,8 +608,14 @@ and fninfo =
 and base_attr =
     Attribute of string mcode
   | MetaAttribute of meta_name mcode * constraints * keep_binding * inherited
+  | GccAttribute of string mcode (* __attribute__ *) *
+                    string mcode (* ( *) * string mcode (* ( *) *
+                    gcc_attr_arg * string mcode (* ) *) * string mcode (* ) *)
 
 and attr = base_attr wrap
+
+and gcc_attr_arg =
+    GccAttributeArg of string mcode
 
 and metaStmtInfo =
     NotSequencible | SequencibleAfterDots of dots_whencode list | Sequencible

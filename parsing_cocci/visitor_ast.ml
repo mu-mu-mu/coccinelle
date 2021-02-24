@@ -922,9 +922,19 @@ let combiner bind option_default
     let k a =
       match Ast.unwrap a with
         Ast.Attribute(attr) -> string_mcode attr
-      | Ast.MetaAttribute(name,_,_,_) -> meta_mcode name in
+      | Ast.MetaAttribute(name,_,_,_) -> meta_mcode name
+      | Ast.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+          let lattr_ = string_mcode attr_ in
+          let llp1 = string_mcode lp1 in
+          let llp2 = string_mcode lp2 in
+          let larg = gcc_attr_arg arg in
+          let lrp1 = string_mcode rp1 in
+          let lrp2 = string_mcode rp2 in
+          multibind [lattr_;llp1;llp2;larg;lrp1;lrp2] in
     attributefn all_functions k a
 
+  and gcc_attr_arg = function
+      Ast.GccAttributeArg(arg) -> string_mcode arg
 
   and whencode notfn alwaysfn = function
       Ast.WhenNot a -> notfn a
@@ -1921,9 +1931,20 @@ let rebuilder
       Ast.rewrap a
         (match Ast.unwrap a with
           Ast.Attribute(attr) -> Ast.Attribute(string_mcode attr)
-	| Ast.MetaAttribute(name,constraints,keep,inherited) ->
-	    Ast.MetaAttribute(meta_mcode name,constraints,keep,inherited)) in
-    attributefn all_functions k a
+        | Ast.MetaAttribute(name,constraints,keep,inherited) ->
+            Ast.MetaAttribute(meta_mcode name,constraints,keep,inherited)
+        | Ast.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+            let attr_ = string_mcode attr_ in
+            let lp1 = string_mcode lp1 in
+            let lp2 = string_mcode lp2 in
+            let arg = gcc_attr_arg arg in
+            let rp1 = string_mcode rp1 in
+            let rp2 = string_mcode rp2 in
+            Ast.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2)) in
+              attributefn all_functions k a
+
+  and gcc_attr_arg = function
+        Ast.GccAttributeArg(arg) -> Ast.GccAttributeArg(string_mcode arg)
 
   and whencode notfn alwaysfn = function
       Ast.WhenNot a -> Ast.WhenNot (notfn a)

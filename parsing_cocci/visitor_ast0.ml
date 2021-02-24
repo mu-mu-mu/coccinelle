@@ -1155,10 +1155,23 @@ let visitor mode bind option_default
           Ast0.Attribute(attr) ->
             let (attr_n,attr) = string_mcode attr in
             (attr_n,Ast0.Attribute(attr))
-	| Ast0.MetaAttribute(name,constraints,pure) ->
-	    let (n,name) = meta_mcode name in
-	    (n,Ast0.MetaAttribute(name,constraints,pure))) in
-    attributefn all_functions k a
+        | Ast0.MetaAttribute(name,constraints,pure) ->
+            let (n,name) = meta_mcode name in
+            (n,Ast0.MetaAttribute(name,constraints,pure))
+        | Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+            let (attr_n,attr_) = string_mcode attr_ in
+            let (lp1_n,lp1) = string_mcode lp1 in
+            let (lp2_n,lp2) = string_mcode lp2 in
+            let (arg_n,arg) = gcc_attr_arg arg in
+            let (rp1_n,rp1) = string_mcode rp1 in
+            let (rp2_n,rp2) = string_mcode rp2 in
+            (multibind [attr_n;lp1_n;lp2_n;rp1_n;rp2_n],
+            Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2))) in
+              attributefn all_functions k a
+
+  and gcc_attr_arg = function
+        Ast0.GccAttributeArg (arg) ->
+  let (args_n,arg) = string_mcode arg in (args_n,Ast0.GccAttributeArg(arg))
 
   (* we only include the when string mcode w because the parameterised
      string_mcodefn function might have side-effects *)

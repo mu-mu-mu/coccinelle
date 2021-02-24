@@ -107,6 +107,7 @@ let attribute a =
   match Ast.unwrap a with
     Ast.Attribute(attr) -> mcode () attr
   | Ast.MetaAttribute(name,b,c,d) -> mcode () name
+  | Ast.GccAttribute(attr_,lp1,lp2,Ast.GccAttributeArg(arg),rp1,rp2) -> mcode () arg
 
 let decl r k e =
   let e = k e in

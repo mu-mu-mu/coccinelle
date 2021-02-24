@@ -1536,6 +1536,7 @@ let rec (expression: (A.expression, Ast_c.expression) matcher) =
         let attr_is_not_context a =
           match A.unwrap a with
           | A.Attribute(_,_,A.CONTEXT(_,_),_)
+          | A.GccAttribute(_,_,_,A.GccAttributeArg(_,_,A.CONTEXT(_,_),_),_,_)
           | A.MetaAttribute((_,_,A.CONTEXT(_,_),_),_,_,_) -> false
           | _ -> true in
         check_allminus.Visitor_ast.combiner_fullType typa &&
@@ -2738,9 +2739,9 @@ and onedecl = fun allminus decla (declb, iiptvirgb, iistob) ->
        if stob = (B.NoSto, false)
        then
          fullType typa typb >>= (fun typa typb ->
-         attribute_list allminus attra endattrs >>= (fun attra endattrs ->
-         tokenf ptvirga iiptvirgb >>= (fun ptvirga iiptvirgb ->
-           return (
+         attribute_list allminus attra (attrs @ endattrs) (*workaound for __attribute__*)
+         >>= (fun attra endattrs -> tokenf ptvirga iiptvirgb
+         >>= (fun ptvirga iiptvirgb -> return (
              (A.TyDecl (typa, attra, ptvirga)) +> A.rewrap decla,
              (({B.v_namei = None;
                 B.v_type = typb;
@@ -4295,6 +4296,22 @@ and attribute = fun allminus ea eb ->
 	      return
 		(A.MetaAttribute(ida,constraints,keep,inherited)+>
 		 A.rewrap ea,eb)))
+  | A.GccAttribute(attr_,lp1,lp2,A.GccAttributeArg(arg),rp1,rp2),
+            (B.GccAttribute attrb, ii) when (A.unwrap_mcode arg) = attrb ->
+      let (ib1, ib2, ib3, ib4, ib5, ib6) = tuple_of_list6 ii in
+      tokenf attr_ ib1 >>= (fun attr_ ib1 ->
+      tokenf lp1 ib2 >>= (fun lp1 ib2 ->
+      tokenf lp2 ib3 >>= (fun lp2 ib3 ->
+      tokenf arg ib4 >>= (fun arg ib4 ->
+      tokenf rp1 ib5 >>= (fun rp1 ib5 ->
+      tokenf rp2 ib6 >>= (fun rp2 ib6 ->
+       (if allminus
+        then minusize_list [ib1;ib2;ib3;ib4;ib5;ib6]
+        else return ((), [ib1;ib2;ib3;ib4;ib5;ib6])) >>= (fun _ ib ->
+	return (
+	  A.rewrap ea (A.GccAttribute(attr_,lp1,lp2,A.GccAttributeArg(arg),rp1,rp2)),
+          (B.GccAttribute attrb,ib)
+        ))))))))
   | _ -> fail
 
 (*---------------------------------------------------------------------------*)

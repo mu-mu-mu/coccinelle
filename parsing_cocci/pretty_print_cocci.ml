@@ -459,6 +459,15 @@ and print_attribute attr =
   match Ast.unwrap attr with
     Ast.Attribute(a) -> mcode print_string a
   | Ast.MetaAttribute(name,_,_,_) -> mcode print_meta name
+  | Ast.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+      mcode print_string attr_; print_string " ";
+      mcode print_string_box lp1; mcode print_string_box lp2;
+      print_gcc_attr_arg arg; close_box();
+      mcode print_string_box rp1; close_box();
+      mcode print_string_box rp2;
+
+and print_gcc_attr_arg = function
+    Ast.GccAttributeArg(arg) -> mcode print_string arg
 
 and typeC ty =
   match Ast.unwrap ty with

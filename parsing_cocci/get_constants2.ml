@@ -532,7 +532,8 @@ let do_get_constants constants keywords env (neg_pos,_) =
   let attribute r k a =
     match Ast.unwrap a with
       Ast.MetaAttribute(name,_,_,_) -> bind (k a) (minherited name)
-    | Ast.Attribute(attr) -> constants (Ast.unwrap_mcode attr) in
+    | Ast.Attribute(attr) -> constants (Ast.unwrap_mcode attr)
+    | Ast.GccAttribute(_,_,_,_,_,rp2) -> bind (keywords "__attribute__") (k a) in
 
   let declaration r k d =
     match Ast.unwrap d with

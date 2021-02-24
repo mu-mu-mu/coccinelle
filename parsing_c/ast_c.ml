@@ -299,6 +299,7 @@ and typeQualifierbis = {const: bool; volatile: bool}
 and attribute = attributebis wrap
   and attributebis =
     | Attribute of string
+    | GccAttribute of string
 
 (* ------------------------------------------------------------------------- *)
 (* C expression *)
@@ -1328,7 +1329,8 @@ let fieldname_of_fieldkind fieldkind =
 
 let s_of_attr attr =
   attr
-  +> List.map (fun (Attribute s, ii) -> s)
+  +> List.map (function (Attribute s, ii) -> s
+                      | (GccAttribute s, ii) -> "__attribute__((" ^ s ^ "))")
   +> String.concat ","
 
 

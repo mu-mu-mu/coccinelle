@@ -158,6 +158,29 @@ val make_attr:
    (Ast_cocci.added_string * Ast0_cocci.position_info) list *
    Ast0_cocci.anything list * string) ->
    Ast0_cocci.attr
+val make_gcc_attr:
+  (Data.line_type * int * int * int * int * int *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   Ast0_cocci.anything list * string) ->
+  (Data.line_type * int * int * int * int * int *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   Ast0_cocci.anything list * string) ->
+  (Data.line_type * int * int * int * int * int *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   Ast0_cocci.anything list * string) ->
+   Ast0_cocci.gcc_attr_arg ->
+  (Data.line_type * int * int * int * int * int *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   Ast0_cocci.anything list * string) ->
+  (Data.line_type * int * int * int * int * int *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   (Ast_cocci.added_string * Ast0_cocci.position_info) list *
+   Ast0_cocci.anything list * string) ->
+   Ast0_cocci.attr
 val top_dots : 'a -> 'a Ast0_cocci.wrap
 val pointerify :
   Ast0_cocci.typeC ->

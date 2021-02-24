@@ -118,7 +118,7 @@ module Ast_c :
       volatile : bool;
     }
     and attribute = attributebis wrap
-    and attributebis = Ast_c.attributebis = Attribute of string
+    and attributebis = Ast_c.attributebis = Attribute of string | GccAttribute of string
     and expression = (expressionbis * exp_info ref) wrap3
     and exp_info = exp_type option * test
     and exp_type = fullType * local
@@ -2933,6 +2933,8 @@ module Ast_cocci :
         Attribute of string mcode
       | MetaAttribute of meta_name mcode * constraints * keep_binding *
           inherited
+      | GccAttribute of string mcode * string mcode * string mcode *
+                        Ast_cocci.gcc_attr_arg * string mcode * string mcode
     and attr = base_attr wrap
     and metaStmtInfo =
       Ast_cocci.metaStmtInfo =
@@ -3566,6 +3568,8 @@ module Ast0_cocci :
       Ast0_cocci.base_attr =
         Attribute of string mcode
       | MetaAttribute of Ast_cocci.meta_name mcode * constraints * pure
+      | GccAttribute of string mcode * string mcode * string mcode *
+                        Ast0_cocci.gcc_attr_arg * string mcode * string mcode
     and attr = base_attr wrap
     and ('a, 'b) whencode =
       ('a, 'b) Ast0_cocci.whencode =

@@ -448,8 +448,14 @@ and fninfo =
 and base_attr =
     Attribute of string mcode
   | MetaAttribute of Ast_cocci.meta_name mcode * constraints * pure
+  | GccAttribute of string mcode (* __attribute__ *) *
+                    string mcode (* ( *) * string mcode (* ( *) *
+                    gcc_attr_arg * string mcode (* ) *) * string mcode (* ) *)
 
 and attr = base_attr wrap
+
+and gcc_attr_arg =
+    GccAttributeArg of string mcode
 
 and ('a,'b) whencode =
     WhenNot of string mcode (* when *) * string mcode (* != *) * 'a

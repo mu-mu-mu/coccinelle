@@ -1287,6 +1287,17 @@ and attribute tgt attr =
       let arity = all_same false tgt (mcode2line name) [mcode2arity name] in
       let name = mcode name in
       make_attribute attr tgt arity (Ast0.MetaAttribute(name,cstr,pure))
+  | Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+      let attr_ = mcode attr_ in
+      let lp1 = mcode lp1 in
+      let lp2 = mcode lp2 in
+      let arg = gcc_attr_arg arg in
+      let rp1 = mcode rp1 in
+      let rp2 = mcode rp2 in
+      Ast0.rewrap attr (Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2))
+
+and gcc_attr_arg = function
+    Ast0.GccAttributeArg(arg) -> Ast0.GccAttributeArg(mcode arg)
 
 and whencode notfn alwaysfn expression = function
     Ast0.WhenNot (w,e,a) -> Ast0.WhenNot (w,e,notfn a)
