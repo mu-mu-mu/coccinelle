@@ -1329,8 +1329,8 @@ type_qualif:
 /*(*-----------------------------------------------------------------------*)*/
 
 attribute:
- | Tattribute TOPar /*stuff*/ TCPar { raise Todo }
  /*(* cppext: *)*/
+ | Tattribute TOPar TOPar TIdent TCPar TCPar { GccAttribute (fst $4), [$1;$2;$3;snd $4;$5;$6] }
  | TMacroAttr { Attribute (fst $1), [snd $1] }
 
 /*(*-----------------------------------------------------------------------*)*/

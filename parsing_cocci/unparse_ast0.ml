@@ -769,6 +769,15 @@ and print_attribute a =
   match Ast0.unwrap a with
     Ast0.Attribute(attr) -> mcode print_string attr
   | Ast0.MetaAttribute(name,_,_) -> mcode print_meta name
+  | Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+      mcode print_string attr_; print_string " ";
+      mcode print_string_box lp1; mcode print_string_box lp2;
+      print_gcc_attr_arg arg; close_box();
+      mcode print_string_box rp1; close_box();
+      mcode print_string_box rp2;
+
+and print_gcc_attr_arg = function
+    Ast0.GccAttributeArg(arg) -> mcode print_string arg
 
 and whencode notfn alwaysfn = function
     Ast0.WhenNot (_,_,a) ->

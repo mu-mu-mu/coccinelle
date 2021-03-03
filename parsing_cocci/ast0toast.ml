@@ -1202,7 +1202,13 @@ and attribute a =
     (match Ast0.unwrap a with
       Ast0.Attribute(attr) -> Ast.Attribute(mcode attr)
     | Ast0.MetaAttribute(name,cstr,_) ->
-	Ast.MetaAttribute(mcode name,constraints cstr,unitary,false))
+	Ast.MetaAttribute(mcode name,constraints cstr,unitary,false)
+    | Ast0.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2) ->
+  Ast.GccAttribute(mcode attr_,mcode lp1,mcode lp2,gcc_attr_arg arg,
+                   mcode rp1,mcode rp2))
+
+and gcc_attr_arg = function
+    Ast0.GccAttributeArg(arg) -> Ast.GccAttributeArg(mcode arg)
 
 and option_to_list = function
     Some x -> [x]

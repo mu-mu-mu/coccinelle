@@ -1148,9 +1148,13 @@ and pp_init (init, iinit) =
 
   and pp_attribute (e,ii) =
     match (e,ii) with
-      Attribute(a), ii  ->
+      Attribute(a), ii ->
         let (i) = Common.tuple_of_list1 ii in
         pr_elem i
+    | GccAttribute(a), ii ->
+        let (i1,i2,i3,i4,i5,i6) = Common.tuple_of_list6 ii in
+        pr_elem i1; pr_elem i2; pr_elem i3;
+        pr_elem i4; pr_elem i5; pr_elem i6;
 
 (* ---------------------- *)
   and pp_def_start defbis iifunc1 iifunc2 ifakestart isto =

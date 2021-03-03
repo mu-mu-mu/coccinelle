@@ -527,7 +527,8 @@ and vk_type = fun bigf t ->
 and vk_attribute = fun bigf attr ->
   let iif ii = vk_ii bigf ii in
   match attr with
-  | Attribute s, ii ->
+  | Attribute s, ii
+  | GccAttribute s, ii ->
       iif ii
 
 
@@ -1455,6 +1456,8 @@ and vk_attribute_s = fun bigf attr ->
   match attr with
   | Attribute s, ii ->
       Attribute s, iif ii
+  | GccAttribute s, ii ->
+      GccAttribute s, iif ii
 
 and vk_exec_code_s = fun bigf e ->
   let iif ii = vk_ii_s bigf ii in
