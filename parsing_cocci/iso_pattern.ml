@@ -1446,6 +1446,8 @@ let match_maker checks_needed context_required whencode_allowed =
   and match_attribute a1 a2 =
     match (Ast0.unwrap a1,Ast0.unwrap a2) with
       (Ast0.Attribute(arga),Ast0.Attribute(argb)) -> match_attr_arg arga argb
+    | (Ast0.GccAttribute(arga),Ast0.GccAttribute(argb)) -> match_attr_arg arga argb
+    |	_ -> return false
 
   and match_attributes a1 a2 =
     match_list match_attribute

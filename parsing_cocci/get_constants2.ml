@@ -536,7 +536,9 @@ let do_get_constants constants keywords env (neg_pos,_) =
 
   let attribute r k a =
     match Ast.unwrap a with
-      Ast.Attribute(attr) -> k a in
+      Ast.Attribute(attr) -> k a
+    | Ast.GccAttribute(_,_,_,arg,_,_) ->
+        bind (keywords "__attribute__") (bind (keywords "__attribute") (k a)) in
 
   let declaration r k d =
     match Ast.unwrap d with

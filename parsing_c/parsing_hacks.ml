@@ -1116,7 +1116,7 @@ let rec find_macro_paren xs =
   | [] -> ()
 
   (* attribute *)
-  | PToken ({tok = Tattribute ii} as id)
+(*| PToken ({tok = Tattribute ii} as id)
     ::Parenthised (xxs,info_parens)
     ::xs
      ->
@@ -1126,7 +1126,7 @@ let rec find_macro_paren xs =
         iter_token_paren (TV.set_as_comment Token_c.CppAttr);
       TV.set_as_comment Token_c.CppAttr id;
       find_macro_paren xs
-
+*)
   | PToken ({tok = TattributeNoarg ii} as id)
     ::xs
      ->

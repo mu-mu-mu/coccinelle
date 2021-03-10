@@ -1543,7 +1543,8 @@ let rec (expression: (A.expression, Ast_c.expression) matcher) =
             | A.MetaAttr((_,_,A.CONTEXT(_,_),_),_,_,_) -> false
             | _ -> true in
           match A.unwrap a with
-          | A.Attribute arg -> attr_arg_is_not_context arg in
+          | A.Attribute arg -> attr_arg_is_not_context arg
+          | A.GccAttribute(_,_,_,arg,_,_) -> attr_arg_is_not_context arg in
         check_allminus.Visitor_ast.combiner_fullType typa &&
         List.for_all attr_is_not_context attrsa in
 
@@ -4287,6 +4288,21 @@ and attribute = fun allminus ea eb ->
 	  A.rewrap ea (A.Attribute(attra)),
           (B.Attribute attrb,ib)
         )))
+  | A.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2), (B.GccAttribute attrb, ii) ->
+      let (ib1, ib2, ib3, ib4, ib5) = tuple_of_list5 ii in
+      tokenf attr_ ib1 >>= (fun attr_ ib1 ->
+      tokenf lp1 ib2 >>= (fun lp1 ib2 ->
+      tokenf lp2 ib3 >>= (fun lp2 ib3 ->
+      attr_arg allminus arg attrb >>= (fun arg attrb ->
+      tokenf rp1 ib4 >>= (fun rp1 ib4 ->
+      tokenf rp2 ib5 >>= (fun rp2 ib5 ->
+       (if allminus
+        then minusize_list [ib1;ib2;ib3;ib4;ib5]
+        else return ((), [ib1;ib2;ib3;ib4;ib5])) >>= (fun _ ib ->
+	return (
+	  A.rewrap ea (A.GccAttribute(attr_,lp1,lp2,arg,rp1,rp2)),
+          (B.GccAttribute attrb,ib)
+        ))))))))
   | _ -> fail
 
 and attr_arg = fun allminus ea eb ->

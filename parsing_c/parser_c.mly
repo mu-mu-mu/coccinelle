@@ -1329,7 +1329,6 @@ type_qualif:
 /*(*-----------------------------------------------------------------------*)*/
 
 attribute:
- | Tattribute TOPar /*stuff*/ TCPar { raise Todo }
  /*(* cppext: *)*/
  | attr_arg { Attribute $1, [] }
 
